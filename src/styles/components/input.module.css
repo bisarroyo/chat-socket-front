@@ -1,0 +1,11 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.input {
+  width: 70%;
+}
+.button {
+  width: 30%;
+}

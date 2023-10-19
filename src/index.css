@@ -10,3 +10,9 @@ body {
   color: #ffffff;
   background-color: black;
 }
+p,
+li,
+input,
+button {
+  font-size: 1.6rem;
+}

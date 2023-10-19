@@ -2,18 +2,18 @@ import Input from './Input'
 import styles from '../styles/components/chatElement.module.css'
 
 import { io } from 'socket.io-client'
-import { useState } from 'react'
+import { FormEvent, ChangeEvent, useState } from 'react'
 
 const socket = io('http://localhost:3000/')
 
 export default function ChatElement() {
   const [input, setInput] = useState('')
 
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (input) {
       console.log(input)

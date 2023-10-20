@@ -2,7 +2,8 @@ import Input from './Input'
 import styles from '../styles/components/chatElement.module.css'
 
 import { io } from 'socket.io-client'
-import { FormEvent, ChangeEvent, useState } from 'react'
+import { FormEvent, ChangeEvent, useState, useEffect } from 'react'
+import Messages from './Messages'
 
 const socket = io('http://localhost:3000/', {
   auth: {
@@ -11,7 +12,8 @@ const socket = io('http://localhost:3000/', {
 })
 
 export default function ChatElement() {
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState<string>('')
+  const [messages, setMessages] = useState<string[]>([])
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value)
@@ -26,8 +28,20 @@ export default function ChatElement() {
     }
   }
 
+  const receiveMessages = (messages: string) =>
+    setMessages((state) => [messages, ...state])
+
+  useEffect(() => {
+    socket.on('chat message', receiveMessages)
+
+    return () => {
+      socket.off('chat message', receiveMessages)
+    }
+  }, [])
+
   return (
     <section className={styles.chatContainer}>
+      <Messages messages={messages} />
       <form onSubmit={handleSubmit} className={styles.form}>
         <Input value={input} onChange={onChange} />
       </form>

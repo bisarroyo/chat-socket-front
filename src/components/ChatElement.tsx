@@ -4,7 +4,11 @@ import styles from '../styles/components/chatElement.module.css'
 import { io } from 'socket.io-client'
 import { FormEvent, ChangeEvent, useState } from 'react'
 
-const socket = io('http://localhost:3000/')
+const socket = io('http://localhost:3000/', {
+  auth: {
+    user: 'Bismark'
+  }
+})
 
 export default function ChatElement() {
   const [input, setInput] = useState('')

@@ -1,11 +1,15 @@
-import { useRef, useState, ChangeEvent } from 'react'
+import { useRef, useState, useEffect, ChangeEvent } from 'react'
 import styles from '../styles/components/input.module.css'
 
 interface AutoResizeTextAreaProps {
   onTextChange: (newText: string) => void
+  clearText: boolean
 }
 
-const Input: React.FC<AutoResizeTextAreaProps> = ({ onTextChange }) => {
+const Input: React.FC<AutoResizeTextAreaProps> = ({
+  onTextChange,
+  clearText
+}) => {
   const [text, setText] = useState<string>('')
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
@@ -22,6 +26,15 @@ const Input: React.FC<AutoResizeTextAreaProps> = ({ onTextChange }) => {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
     }
   }
+
+  useEffect(() => {
+    // Se ejecuta cuando clearText cambia a true
+    if (clearText) {
+      setText('')
+      // Notificar al padre que se ha borrado el texto
+      onTextChange('')
+    }
+  }, [clearText, onTextChange])
 
   return (
     <div className={styles.inputContainer}>

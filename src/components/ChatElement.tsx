@@ -12,6 +12,7 @@ const socket = io('http://localhost:3000/', {
 })
 
 export default function ChatElement() {
+  const [clearText, setCleartext] = useState<boolean>(false)
   const [input, setInput] = useState<string>('')
   const [messages, setMessages] = useState<string[]>([])
 
@@ -24,7 +25,7 @@ export default function ChatElement() {
     if (input) {
       console.log(input)
       socket.emit('chat message', input)
-      setInput('')
+      setCleartext(true)
     }
   }
 
@@ -43,7 +44,7 @@ export default function ChatElement() {
     <section className={styles.chatContainer}>
       <Messages messages={messages} />
       <form onSubmit={handleSubmit} className={styles.form}>
-        <Input onTextChange={handleTextChange} />
+        <Input onTextChange={handleTextChange} clearText={clearText} />
       </form>
     </section>
   )

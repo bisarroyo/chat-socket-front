@@ -1,21 +1,45 @@
+import { useRef, useState, ChangeEvent } from 'react'
 import styles from '../styles/components/input.module.css'
 
-interface InputProps {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  value: string
+interface AutoResizeTextAreaProps {
+  onTextChange: (newText: string) => void
 }
 
-const Input: React.FC<InputProps> = ({ onChange, value }) => {
+const Input: React.FC<AutoResizeTextAreaProps> = ({ onTextChange }) => {
+  const [text, setText] = useState<string>('')
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = event.target.value
+    setText(event.target.value)
+    adjustTextareaHeight()
+    onTextChange(newText)
+  }
+
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }
+  }
+
   return (
     <div className={styles.inputContainer}>
-      <input
+      <textarea
         className={styles.input}
-        type='text'
         name='chat'
         id='chat'
-        onChange={onChange}
-        value={value}
+        onChange={handleInputChange}
+        value={text}
+        ref={textareaRef}
+        placeholder='Escribe tu mensaje aquí...'
+        style={{
+          minHeight: '50px', // Altura mínima
+          maxHeight: '200px', // Altura máxima
+          resize: 'none' // Evitar que el usuario pueda redimensionar manualmente
+        }}
       />
+      <textarea />
       <button className={styles.button}>Enviar</button>
     </div>
   )

@@ -18,6 +18,7 @@ export default function ChatElement() {
 
   const handleTextChange = (newText: string) => {
     setInput(newText)
+    setCleartext(false)
   }
 
   const handleSubmit = (e: FormEvent) => {
